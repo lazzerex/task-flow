@@ -161,5 +161,81 @@
         document.getElementById('darkModeToggle').classList.add('bg-yellow-500', 'text-gray-900');
     }
 </script>
+<script>
+    // Task search functionality
+    document.addEventListener('DOMContentLoaded', function() {
+        const searchInput = document.querySelector('input[type="search"]');
+        if (searchInput) {
+            console.log('Search input found');
+            
+            searchInput.addEventListener('input', function() {
+                console.log('Search input changed:', this.value);
+                const searchTerm = this.value.toLowerCase();
+                const taskCards = document.querySelectorAll('.task-card');
+                
+                taskCards.forEach(card => {
+                    const taskTitle = card.querySelector('h3')?.textContent.toLowerCase() || '';
+                    const taskDescription = card.querySelector('p')?.textContent.toLowerCase() || '';
+                    
+                    if (taskTitle.includes(searchTerm) || taskDescription.includes(searchTerm)) {
+                        card.style.display = 'block';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+                
+                // Update counter if progress bars exist
+                updateProgressCounters();
+            });
+            
+           
+        }
+        
+        // Function to update progress counters
+        function updateProgressCounters() {
+            // Get only visible tasks
+            const visibleTasks = document.querySelectorAll('.task-card[style*="display: block"], .task-card:not([style*="display: none"])');
+            const totalVisible = visibleTasks.length;
+            
+            // Update the counters if they exist
+            const pendingCounter = document.querySelector('.progress-pending .counter');
+            const inProgressCounter = document.querySelector('.progress-in-progress .counter');
+            const completedCounter = document.querySelector('.progress-completed .counter');
+            
+            if (pendingCounter) {
+                const pendingCount = document.querySelectorAll('.task-card[data-status="pending"][style*="display: block"], .task-card[data-status="pending"]:not([style*="display: none"])').length;
+                pendingCounter.textContent = pendingCount;
+                
+                // Update progress bar if it exists
+                const pendingBar = document.querySelector('.progress-pending .bar-fill');
+                if (pendingBar && totalVisible > 0) {
+                    pendingBar.style.width = `${(pendingCount / totalVisible * 100)}%`;
+                }
+            }
+            
+            if (inProgressCounter) {
+                const inProgressCount = document.querySelectorAll('.task-card[data-status="in_progress"][style*="display: block"], .task-card[data-status="in_progress"]:not([style*="display: none"])').length;
+                inProgressCounter.textContent = inProgressCount;
+                
+                // Update progress bar if it exists
+                const inProgressBar = document.querySelector('.progress-in-progress .bar-fill');
+                if (inProgressBar && totalVisible > 0) {
+                    inProgressBar.style.width = `${(inProgressCount / totalVisible * 100)}%`;
+                }
+            }
+            
+            if (completedCounter) {
+                const completedCount = document.querySelectorAll('.task-card[data-status="completed"][style*="display: block"], .task-card[data-status="completed"]:not([style*="display: none"])').length;
+                completedCounter.textContent = completedCount;
+                
+                // Update progress bar if it exists
+                const completedBar = document.querySelector('.progress-completed .bar-fill');
+                if (completedBar && totalVisible > 0) {
+                    completedBar.style.width = `${(completedCount / totalVisible * 100)}%`;
+                }
+            }
+        }
+    });
+</script>
 </body>
 </html>

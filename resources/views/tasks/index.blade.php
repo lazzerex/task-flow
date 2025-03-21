@@ -48,7 +48,8 @@
     @else
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             @foreach($tasks as $task)
-                <div class="bg-white rounded-lg shadow-sm overflow-hidden border border-gray-200 hover:shadow-md transition-shadow task-card" data-status="{{ $task->status }}">
+            
+            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden border-2 border-gray-200 dark:border-gray-600 hover:border-blue-400 dark:hover:border-blue-500 hover:shadow-lg transition-all duration-300 task-card" data-status="{{ $task->status }}">
                     <div class="px-4 py-5 sm:p-6">
                         <div class="flex justify-between items-start">
                             <h3 class="text-lg font-medium text-gray-900 truncate mb-1">{{ $task->title }}</h3>

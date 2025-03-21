@@ -135,6 +135,60 @@
   }
 }
 /* Dark mode styles */
+
+
+/*-------------------------------------------new update visual---------------------------------------------------------*/
+
+
+/* Dark mode input styles */
+.dark input,
+.dark textarea,
+.dark select {
+  @apply bg-gray-700 border-gray-600 text-white;
+}
+
+/* Dark mode input placeholder */
+.dark input::placeholder,
+.dark textarea::placeholder {
+  @apply text-gray-400;
+}
+
+/* Specific style for date inputs in dark mode */
+.dark input[type="date"] {
+  @apply text-white;
+}
+
+/* Dark mode dropdown style */
+.dark select {
+  @apply bg-gray-700 border-gray-600 text-white;
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%239ca3af' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+}
+
+/* Fix for date picker calendar icon in dark mode */
+.dark input[type="date"]::-webkit-calendar-picker-indicator {
+  filter: invert(1);
+}s
+
+/* Form field styles in dark mode */
+.dark .form-label {
+  @apply text-gray-200;
+}
+
+.dark .form-input:focus,
+.dark select:focus {
+  @apply border-blue-500 ring ring-blue-500 ring-opacity-50;
+}
+
+/* Enhance visual distinction for inputs */
+.dark input,
+.dark textarea,
+.dark select {
+  @apply shadow-sm;
+}
+
+/*------------------------------------------------------------------new update visual---------------------------------------------------------*/
+
+
 .dark body {
   @apply bg-gray-900 text-gray-100;
 }
