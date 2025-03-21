@@ -137,8 +137,64 @@
 /* Dark mode styles */
 
 
-/*-------------------------------------------new update visual---------------------------------------------------------*/
+/*-------------------------------------------new visual update---------------------------------------------------------*/
 
+/* Improved pagination styling */
+.pagination {
+  @apply flex items-center justify-center gap-1 mt-6;
+}
+
+.pagination nav {
+  @apply inline-flex rounded-md shadow-sm -space-x-px;
+}
+
+.pagination nav > div {
+  @apply hidden; /* Hide the "Showing X to Y of Z results" text if needed */
+}
+
+.pagination nav > span,
+.pagination nav a {
+  @apply relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-700;
+}
+
+.pagination nav > span:hover,
+.pagination nav a:hover {
+  @apply bg-gray-50;
+}
+
+.pagination nav > span.active,
+.pagination nav > a.active {
+  @apply z-10 bg-blue-50 border-blue-500 text-blue-600;
+}
+
+/* Dark mode styles */
+.dark .pagination nav > span,
+.dark .pagination nav a {
+  @apply bg-gray-800 border-gray-600 text-gray-300;
+}
+
+.dark .pagination nav > span:hover,
+.dark .pagination nav a:hover {
+  @apply bg-gray-700;
+}
+
+.dark .pagination nav > span.active,
+.dark .pagination nav > a.active {
+  @apply bg-blue-900 border-blue-700 text-blue-300;
+}
+
+/* Pagination styling for dark mode */
+.dark .pagination-link {
+  @apply bg-gray-800 text-white border-gray-700;
+}
+
+.dark .pagination-link:hover {
+  @apply bg-gray-700;
+}
+
+.dark .pagination-active {
+  @apply bg-blue-600 text-white border-blue-500;
+}
 
 /* Dark mode input styles */
 .dark input,
@@ -186,7 +242,7 @@
   @apply shadow-sm;
 }
 
-/*------------------------------------------------------------------new update visual---------------------------------------------------------*/
+/*------------------------------------------------------------------new visual update---------------------------------------------------------*/
 
 
 .dark body {
