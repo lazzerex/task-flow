@@ -33,6 +33,53 @@
                             </a>
                         </nav>
                     </div>
+                    <div class="flex items-center">
+                        @guest
+                            <a href="{{ route('login') }}" class="px-3 py-2 rounded-md text-sm font-medium text-primary-100 hover:bg-primary-700 hover:text-white transition-colors">
+                                Login
+                            </a>
+                            <a href="{{ route('register') }}" class="ml-2 px-3 py-2 rounded-md text-sm font-medium bg-white text-primary-700 hover:bg-primary-50 transition-colors">
+                                Register
+                            </a>
+                        @else
+                            <div class="relative ml-3">
+                                <div>
+                                    <button type="button" id="user-menu-button" class="flex items-center text-white hover:text-primary-200 focus:outline-none" aria-expanded="false" aria-haspopup="true">
+                                        <span class="sr-only">Open user menu</span>
+                                        <span class="mr-2">{{ Auth::user()->name }}</span>
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                            <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                                        </svg>
+                                    </button>
+                                </div>
+                                <div id="user-dropdown" class="hidden absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none z-10" role="menu" aria-orientation="vertical" aria-labelledby="user-menu-button" tabindex="-1">
+                                    <form method="POST" action="{{ route('logout') }}">
+                                        @csrf
+                                        <button type="submit" class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">
+                                            Logout
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                            
+                            <script>
+                                // Toggle dropdown menu
+                                document.getElementById('user-menu-button').addEventListener('click', function() {
+                                    const dropdown = document.getElementById('user-dropdown');
+                                    dropdown.classList.toggle('hidden');
+                                });
+                                
+                                // Close dropdown when clicking outside
+                                window.addEventListener('click', function(e) {
+                                    const dropdown = document.getElementById('user-dropdown');
+                                    const button = document.getElementById('user-menu-button');
+                                    if (!dropdown.contains(e.target) && !button.contains(e.target)) {
+                                        dropdown.classList.add('hidden');
+                                    }
+                                });
+                            </script>
+                        @endguest
+                    </div>
                 </div>
             </div>
         </header>
@@ -46,7 +93,7 @@
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                         </svg>
                         <span class="block sm:inline pr-8">{{ session('success') }}</span>
-                        <button type="button" class="absolute top-0 right-0 p-3" onclick="this.parentElement.parentElement.style.display='none'">
+                        <button type="button" class="absolute top-1/2 right-3 transform -translate-y-1/2 p-2" onclick="this.parentElement.parentElement.style.display='none'">
                             <svg class="h-4 w-4 text-green-800" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                             </svg>
