@@ -18,4 +18,7 @@ Route::get('/', function () {
     /*return view('welcome');*/
     return redirect()->route('tasks.index');
 });
+
 Route::resource('tasks', TaskController::class);
+
+Route::post('/tasks/filter', [TaskController::class, 'filter'])->name('tasks.filter');

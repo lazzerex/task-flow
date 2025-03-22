@@ -13,10 +13,45 @@ class TaskController extends Controller
     public function index()
     {
         //
-        $tasks = Task::latest()->paginate(9);
+        //$tasks = Task::latest()->paginate(9);
 
         // Pass the tasks to the view
-        return view('tasks.index', compact('tasks'));
+        //return view('tasks.index', compact('tasks'));
+
+        //get all tasks first
+        $allTasks = Task::latest()->get();
+        //get current page
+        $currentPage = request()->input('page', 1);
+        //apply filter
+        $statusFilter = session('status_filter');
+
+        // If filtered, filter the collection
+    if ($statusFilter) {
+        $filteredTasks = $allTasks->filter(function ($task) use ($statusFilter) {
+            return $task->status === $statusFilter;
+        });
+    } else {
+        $filteredTasks = $allTasks;
+    }
+    
+    // Manually paginate the filtered results
+    $perPage = 9;
+    $tasks = new \Illuminate\Pagination\LengthAwarePaginator(
+        $filteredTasks->forPage($currentPage, $perPage),
+        $filteredTasks->count(),
+        $perPage,
+        $currentPage,
+        ['path' => request()->url(), 'query' => request()->query()]
+    );
+    return view('tasks.index', compact('tasks'));
+
+    }
+
+    //new filter function
+    public function filter(Request $request)
+    {
+        session(['status_filter' => $request->status]);
+        return redirect()->route('tasks.index');
     }
 
     /**

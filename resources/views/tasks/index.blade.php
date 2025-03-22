@@ -14,15 +14,16 @@
 <!-- Task Filter Controls (Optional) -->
 <div class="bg-white rounded-lg shadow-sm p-4 mb-6">
     <div class="flex flex-wrap items-center gap-4">
-        <div class="flex items-center">
-            <span class="text-sm font-medium text-gray-700 mr-2">Filter by Status:</span>
-            <select class="status-filter rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
-                <option value="">All Tasks</option>
-                <option value="pending">Pending</option>
-                <option value="in_progress">In Progress</option>
-                <option value="completed">Completed</option>
-            </select>
-        </div>
+    <form action="{{ route('tasks.filter') }}" method="POST" class="flex items-center">
+    @csrf
+    <span class="text-sm font-medium text-gray-700 dark:text-gray-300 mr-2">Filter by Status:</span>
+    <select name="status" class="status-filter rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50" onchange="this.form.submit()">
+        <option value="">All Tasks</option>
+        <option value="pending" {{ session('status_filter') === 'pending' ? 'selected' : '' }}>Pending</option>
+        <option value="in_progress" {{ session('status_filter') === 'in_progress' ? 'selected' : '' }}>In Progress</option>
+        <option value="completed" {{ session('status_filter') === 'completed' ? 'selected' : '' }}>Completed</option>
+    </select>
+</form>
         <div class="relative flex-grow max-w-sm">
             <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
                 <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
