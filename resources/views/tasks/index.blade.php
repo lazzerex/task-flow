@@ -24,14 +24,16 @@
         <option value="completed" {{ session('status_filter') === 'completed' ? 'selected' : '' }}>Completed</option>
     </select>
 </form>
-        <div class="relative flex-grow max-w-sm">
-            <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
-                </svg>
-            </div>
-            <input type="search" class="pl-10 rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50 w-full" placeholder="Search tasks...">
+<div class="relative flex-grow max-w-sm">
+    <form action="{{ route('tasks.index') }}" method="GET" class="search-form">
+        <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+            <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+            </svg>
         </div>
+        <input type="search" name="search" value="{{ request('search') }}" class="pl-10 rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50 w-full" placeholder="Search tasks...">
+    </form>
+</div>
     </div>
 </div>
 
@@ -95,7 +97,7 @@
 
 <div class="mt-8 flex items-center justify-between">
     @if ($tasks->previousPageUrl())
-        <a href="{{ $tasks->previousPageUrl() }}" class="px-4 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-md text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700">
+        <a href="{{ $tasks->appends(request()->except('page'))->previousPageUrl() }}" class="px-4 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-md text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700">
             « Previous
         </a>
     @else
@@ -109,7 +111,7 @@
     </span>
 
     @if ($tasks->nextPageUrl())
-        <a href="{{ $tasks->nextPageUrl() }}" class="px-4 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-md text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700">
+        <a href="{{ $tasks->appends(request()->except('page'))->nextPageUrl() }}" class="px-4 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-md text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700">
             Next »
         </a>
     @else

@@ -10,41 +10,46 @@ class TaskController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
-        //$tasks = Task::latest()->paginate(9);
+        // Get all tasks first
+        $allTasks = Task::latest();
 
-        // Pass the tasks to the view
-        //return view('tasks.index', compact('tasks'));
+        // Apply search filter if provided
+        $searchTerm = $request->input('search');
+        if ($searchTerm) {
+            $allTasks->where(function ($query) use ($searchTerm) {
+                $query->where('title', 'like', '%' . $searchTerm . '%')
+                    ->orWhere('description', 'like', '%' . $searchTerm . '%');
+            });
+        }
 
-        //get all tasks first
-        $allTasks = Task::latest()->get();
-        //get current page
+        $allTasks = $allTasks->get();
+
+        // Get current page
         $currentPage = request()->input('page', 1);
-        //apply filter
+
+        // Apply status filter if set in session
         $statusFilter = session('status_filter');
+        if ($statusFilter) {
+            $filteredTasks = $allTasks->filter(function ($task) use ($statusFilter) {
+                return $task->status === $statusFilter;
+            });
+        } else {
+            $filteredTasks = $allTasks;
+        }
 
-        // If filtered, filter the collection
-    if ($statusFilter) {
-        $filteredTasks = $allTasks->filter(function ($task) use ($statusFilter) {
-            return $task->status === $statusFilter;
-        });
-    } else {
-        $filteredTasks = $allTasks;
-    }
-    
-    // Manually paginate the filtered results
-    $perPage = 9;
-    $tasks = new \Illuminate\Pagination\LengthAwarePaginator(
-        $filteredTasks->forPage($currentPage, $perPage),
-        $filteredTasks->count(),
-        $perPage,
-        $currentPage,
-        ['path' => request()->url(), 'query' => request()->query()]
-    );
-    return view('tasks.index', compact('tasks'));
+        // Manually paginate the filtered results
+        $perPage = 9;
+        $tasks = new \Illuminate\Pagination\LengthAwarePaginator(
+            $filteredTasks->forPage($currentPage, $perPage),
+            $filteredTasks->count(),
+            $perPage,
+            $currentPage,
+            ['path' => request()->url(), 'query' => request()->query()]
+        );
 
+        return view('tasks.index', compact('tasks'));
     }
 
     //new filter function
@@ -76,10 +81,10 @@ class TaskController extends Controller
             'status' => 'required|in:pending,in_progress,completed',
             'due_date' => 'nullable|date',
         ]);
-        
+
         // Create a new task with the validated data
         Task::create($validated);
-        
+
         // Redirect to the tasks index page with a success message
         return redirect()->route('tasks.index')
             ->with('success', 'Task created successfully!');
@@ -117,10 +122,10 @@ class TaskController extends Controller
             'status' => 'required|in:pending,in_progress,completed',
             'due_date' => 'nullable|date',
         ]);
-        
+
         // Update the task with the validated data
         $task->update($validated);
-        
+
         // Redirect to the task's detail page with a success message
         return redirect()->route('tasks.show', $task)
             ->with('success', 'Task updated successfully!');
@@ -133,7 +138,7 @@ class TaskController extends Controller
     {
         // Delete the task
         $task->delete();
-        
+
         // Redirect to the tasks index page with a success message
         return redirect()->route('tasks.index')
             ->with('success', 'Task deleted successfully!');
