@@ -16,6 +16,9 @@ Tired of juggling tasks across spreadsheets, emails, and scattered notes? Taskfl
 
 ![image](https://github.com/user-attachments/assets/2311cff1-3a72-4777-9849-2c6d249180af)
 
+![image](https://github.com/user-attachments/assets/272662b5-d5da-429d-90af-13bfbffa22a1)
+
+
 ![image](https://github.com/user-attachments/assets/8758a6b9-2475-4ee5-8970-d454b6a83319)
 
 ![image](https://github.com/user-attachments/assets/558a5c4b-c8a7-4485-8e7d-af1d5102cec5)
