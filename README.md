@@ -7,7 +7,7 @@
 <a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
 </p>
 
-## Taskflow: Streamline Your Workflow, Achieve Your Goals.
+## TaskFlow: Streamline Your Workflow, Achieve Your Goals.
 Tired of juggling tasks across spreadsheets, emails, and scattered notes? Taskflow is your intuitive and powerful web application designed to bring clarity and control to your personal and team workflows.
 
 ![image](https://github.com/user-attachments/assets/03acfb81-5b5b-445e-87a8-1a7eb6b4394e)
