@@ -14,8 +14,7 @@
 <!-- Task Filter Controls -->
 <div class="filter-section">
     <div class="filter-controls">
-        <form id="filterForm" class="filter-form">
-            @csrf
+        <div class="filter-group">
             <span class="filter-label">Filter by Status:</span>
             <select name="status" id="statusFilter" class="filter-select status-filter">
                 <option value="">All Tasks</option>
@@ -23,16 +22,15 @@
                 <option value="in_progress" {{ session('status_filter') === 'in_progress' ? 'selected' : '' }}>In Progress</option>
                 <option value="completed" {{ session('status_filter') === 'completed' ? 'selected' : '' }}>Completed</option>
             </select>
-        </form>
+        </div>
+        
         <div class="search-container">
-            <form id="searchForm" class="search-form">
-                <div class="search-icon">
-                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
-                    </svg>
-                </div>
-                <input type="search" name="search" id="searchInput" value="{{ request('search') }}" class="search-input" placeholder="Search tasks...">
-            </form>
+            <div class="search-icon">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                </svg>
+            </div>
+            <input type="search" name="search" id="searchInput" value="{{ request('search') }}" class="search-input" placeholder="Search tasks...">
         </div>
     </div>
 </div>
@@ -48,7 +46,7 @@
     @if($tasks->isEmpty())
     <div class="empty-state">
         <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path>
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path>
         </svg>
         <h3>No tasks yet</h3>
         <p>Get started by creating your first task</p>
@@ -156,107 +154,19 @@
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
 }
+
+.filter-group {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
 </style>
 
+<!-- Configure JavaScript variables -->
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-    const statusFilter = document.getElementById('statusFilter');
-    const searchInput = document.getElementById('searchInput');
-    const taskContent = document.getElementById('taskContent');
-    const paginationContent = document.getElementById('paginationContent');
-    const loadingIndicator = document.getElementById('loadingIndicator');
-    
-    let searchTimeout;
-
-    // Function to show loading indicator
-    function showLoading() {
-        loadingIndicator.style.display = 'flex';
-        taskContent.style.opacity = '0.5';
-    }
-
-    // Function to hide loading indicator
-    function hideLoading() {
-        loadingIndicator.style.display = 'none';
-        taskContent.style.opacity = '1';
-    }
-
-    // Function to perform AJAX request
-    function performFilter() {
-        showLoading();
-        
-        const formData = new FormData();
-        formData.append('_token', document.querySelector('input[name="_token"]').value);
-        formData.append('status', statusFilter.value);
-        formData.append('search', searchInput.value);
-
-        axios.post('{{ route("tasks.filter") }}', formData, {
-            headers: {
-                'X-Requested-With': 'XMLHttpRequest'
-            }
-        })
-        .then(response => {
-            if (response.data.success) {
-                taskContent.innerHTML = response.data.html;
-                paginationContent.innerHTML = response.data.pagination;
-                
-                taskContent.style.opacity = '0';
-                setTimeout(() => {
-                    taskContent.style.opacity = '1';
-                    taskContent.style.transition = 'opacity 0.3s ease-in';
-                }, 10);
-            }
-        })
-        .catch(error => {
-            console.error('Error filtering tasks:', error);
-        })
-        .finally(() => {
-            hideLoading();
-        });
-    }
-
-    // Status filter change handler
-    statusFilter.addEventListener('change', performFilter);
-
-    // Search input handler with debouncing
-    searchInput.addEventListener('input', function() {
-        clearTimeout(searchTimeout);
-        searchTimeout = setTimeout(performFilter, 300);
-    });
-
-    // Handle pagination clicks
-    document.addEventListener('click', function(e) {
-        if (e.target.classList.contains('pagination-link')) {
-            e.preventDefault();
-            showLoading();
-            
-            const url = e.target.href;
-            const params = new URLSearchParams();
-            params.append('status', statusFilter.value);
-            params.append('search', searchInput.value);
-            
-            axios.get(url, {
-                params: params,
-                headers: {
-                    'X-Requested-With': 'XMLHttpRequest'
-                }
-            })
-            .then(response => {
-                if (response.data.success) {
-                    taskContent.innerHTML = response.data.html;
-                    paginationContent.innerHTML = response.data.pagination;
-                    
-                    // Scroll to top of task content
-                    taskContent.scrollIntoView({ behavior: 'smooth' });
-                }
-            })
-            .catch(error => {
-                console.error('Error loading page:', error);
-            })
-            .finally(() => {
-                hideLoading();
-            });
-        }
-    });
-});
+    // Make Laravel routes available to JavaScript
+    window.taskFilterRoute = '{{ route("tasks.filter") }}';
+    // Make CSRF token available globally for axios
+    window.csrfToken = '{{ csrf_token() }}';
 </script>
 @endsection

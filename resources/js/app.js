@@ -2,8 +2,15 @@
  * Task Manager Main JavaScript
  */
 import './bootstrap.js';
+import { TaskFiltering } from './task-filtering.js';
 
 document.addEventListener('DOMContentLoaded', function() {
+    // Initialize task filtering
+    const taskFiltering = new TaskFiltering();
+    
+    // Make it globally accessible if needed
+    window.taskFiltering = taskFiltering;
+    
     // Animate flash messages
     const flashMessages = document.querySelectorAll('[role="alert"]');
     flashMessages.forEach(message => {

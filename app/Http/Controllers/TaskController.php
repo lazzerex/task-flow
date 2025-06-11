@@ -52,7 +52,7 @@ class TaskController extends Controller
         // If it's an AJAX request, return JSON response
         if ($request->ajax()) {
             $taskGridHtml = $this->renderTaskGrid($tasks);
-            $paginationHtml = $this->renderPagination($tasks);
+            $paginationHtml = $this->renderPagination($tasks, $request);
             
             return response()->json([
                 'success' => true,
@@ -224,16 +224,29 @@ class TaskController extends Controller
     /**
      * Render pagination HTML for AJAX responses
      */
-    private function renderPagination($tasks)
+    private function renderPagination($tasks, $request = null)
     {
         if ($tasks->isEmpty()) {
             return '';
         }
 
+        // Get current filter parameters
+        $currentParams = [];
+        if ($request) {
+            if ($request->has('status') && $request->input('status')) {
+                $currentParams['status'] = $request->input('status');
+            }
+            if ($request->has('search') && $request->input('search')) {
+                $currentParams['search'] = $request->input('search');
+            }
+        }
+
         $html = '<div class="pagination">';
         
         if ($tasks->previousPageUrl()) {
-            $html .= '<a href="' . $tasks->appends(request()->except('page'))->previousPageUrl() . '" class="pagination-btn pagination-link">« Previous</a>';
+            $prevParams = array_merge($currentParams, ['page' => $tasks->currentPage() - 1]);
+            $prevUrl = route('tasks.index', $prevParams);
+            $html .= '<a href="' . $prevUrl . '" class="pagination-btn pagination-link">« Previous</a>';
         } else {
             $html .= '<span class="pagination-btn disabled">« Previous</span>';
         }
@@ -241,7 +254,9 @@ class TaskController extends Controller
         $html .= '<span class="pagination-info">Page ' . $tasks->currentPage() . ' of ' . $tasks->lastPage() . '</span>';
         
         if ($tasks->nextPageUrl()) {
-            $html .= '<a href="' . $tasks->appends(request()->except('page'))->nextPageUrl() . '" class="pagination-btn pagination-link">Next »</a>';
+            $nextParams = array_merge($currentParams, ['page' => $tasks->currentPage() + 1]);
+            $nextUrl = route('tasks.index', $nextParams);
+            $html .= '<a href="' . $nextUrl . '" class="pagination-btn pagination-link">Next »</a>';
         } else {
             $html .= '<span class="pagination-btn disabled">Next »</span>';
         }
