@@ -5,13 +5,10 @@ import './bootstrap.js';
 import { TaskFiltering } from './task-filtering.js';
 
 document.addEventListener('DOMContentLoaded', function() {
-    // Initialize task filtering
+    
     const taskFiltering = new TaskFiltering();
+    window.taskFiltering = taskFiltering; // globally accessible 
     
-    // Make it globally accessible if needed
-    window.taskFiltering = taskFiltering;
-    
-    // Animate flash messages
     const flashMessages = document.querySelectorAll('[role="alert"]');
     flashMessages.forEach(message => {
         setTimeout(() => {
@@ -23,12 +20,10 @@ document.addEventListener('DOMContentLoaded', function() {
         }, 5000);
     });
     
-    // Handle task completion animation
     const statusDropdowns = document.querySelectorAll('select[name="status"]');
     statusDropdowns.forEach(dropdown => {
         dropdown.addEventListener('change', function() {
             if (this.value === 'completed') {
-                // Add a small animation to the select element
                 this.classList.add('status-change');
                 setTimeout(() => {
                     this.classList.remove('status-change');
@@ -37,7 +32,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
     
-    // Quick action buttons animation
     const quickActionButtons = document.querySelectorAll('.task-card form button');
     quickActionButtons.forEach(button => {
         button.addEventListener('click', function() {
@@ -52,7 +46,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
     
-    // Enhance the delete confirmation with a custom dialog
     const deleteButtons = document.querySelectorAll('form[action*="destroy"] button');
     deleteButtons.forEach(button => {
         button.addEventListener('click', function(e) {
@@ -67,16 +60,15 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
-// Dark mode functionality
 document.addEventListener('DOMContentLoaded', function() {
-    // Check for saved theme preference or use user's system preference
+
     const darkModeToggle = document.getElementById('darkModeToggle');
     
     if (darkModeToggle) {
         const moonIcon = darkModeToggle.querySelector('.moon-icon');
         const sunIcon = darkModeToggle.querySelector('.sun-icon');
         
-        // Function to set theme
+        
         const setTheme = (isDark) => {
             if (isDark) {
                 document.documentElement.classList.add('dark');
@@ -95,14 +87,14 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         };
         
-        // Check for saved theme preference
+        
         if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
             setTheme(true);
         } else {
             setTheme(false);
         }
         
-        // Toggle theme when button is clicked
+        
         darkModeToggle.addEventListener('click', function() {
             const isDark = document.documentElement.classList.contains('dark');
             setTheme(!isDark);
@@ -110,43 +102,45 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 
-// Global utility functions for task management
+
 window.TaskManager = {
-    // Function to update progress counts (if you have progress bars)
-    updateProgressCounts: function() {
-        const visibleTasks = document.querySelectorAll('.task-card');
-        const totalVisible = visibleTasks.length;
+
+    //will be added later
+
+    // updateProgressCounts: function() {
+    //     const visibleTasks = document.querySelectorAll('.task-card');
+    //     const totalVisible = visibleTasks.length;
         
-        const pendingCount = document.querySelectorAll('.task-card[data-status="pending"]').length;
-        const inProgressCount = document.querySelectorAll('.task-card[data-status="in_progress"]').length;
-        const completedCount = document.querySelectorAll('.task-card[data-status="completed"]').length;
+    //     const pendingCount = document.querySelectorAll('.task-card[data-status="pending"]').length;
+    //     const inProgressCount = document.querySelectorAll('.task-card[data-status="in_progress"]').length;
+    //     const completedCount = document.querySelectorAll('.task-card[data-status="completed"]').length;
         
-        // Update the progress bars if they exist
-        const pendingCounter = document.querySelector('.progress-pending .counter');
-        const inProgressCounter = document.querySelector('.progress-in-progress .counter');
-        const completedCounter = document.querySelector('.progress-completed .counter');
+    //     // Update the progress bars if they exist
+    //     const pendingCounter = document.querySelector('.progress-pending .counter');
+    //     const inProgressCounter = document.querySelector('.progress-in-progress .counter');
+    //     const completedCounter = document.querySelector('.progress-completed .counter');
         
-        if (pendingCounter) pendingCounter.textContent = pendingCount;
-        if (inProgressCounter) inProgressCounter.textContent = inProgressCount;
-        if (completedCounter) completedCounter.textContent = completedCount;
+    //     if (pendingCounter) pendingCounter.textContent = pendingCount;
+    //     if (inProgressCounter) inProgressCounter.textContent = inProgressCount;
+    //     if (completedCounter) completedCounter.textContent = completedCount;
         
-        // Update progress bar widths
-        const pendingBar = document.querySelector('.progress-pending .bar-fill');
-        const inProgressBar = document.querySelector('.progress-in-progress .bar-fill');
-        const completedBar = document.querySelector('.progress-completed .bar-fill');
+    //     // Update progress bar widths
+    //     const pendingBar = document.querySelector('.progress-pending .bar-fill');
+    //     const inProgressBar = document.querySelector('.progress-in-progress .bar-fill');
+    //     const completedBar = document.querySelector('.progress-completed .bar-fill');
         
-        if (pendingBar && totalVisible > 0) pendingBar.style.width = `${(pendingCount / totalVisible * 100)}%`;
-        if (inProgressBar && totalVisible > 0) inProgressBar.style.width = `${(inProgressCount / totalVisible * 100)}%`;
-        if (completedBar && totalVisible > 0) completedBar.style.width = `${(completedCount / totalVisible * 100)}%`;
-    },
+    //     if (pendingBar && totalVisible > 0) pendingBar.style.width = `${(pendingCount / totalVisible * 100)}%`;
+    //     if (inProgressBar && totalVisible > 0) inProgressBar.style.width = `${(inProgressCount / totalVisible * 100)}%`;
+    //     if (completedBar && totalVisible > 0) completedBar.style.width = `${(completedCount / totalVisible * 100)}%`;
+    // },
     
-    // Function to show toast notifications
+   
     showToast: function(message, type = 'success') {
         const toast = document.createElement('div');
         toast.className = `toast toast-${type}`;
         toast.textContent = message;
         
-        // Add toast styles if not already present
+        
         if (!document.querySelector('.toast-container')) {
             const container = document.createElement('div');
             container.className = 'toast-container';
@@ -155,10 +149,10 @@ window.TaskManager = {
         
         document.querySelector('.toast-container').appendChild(toast);
         
-        // Animate in
+        
         setTimeout(() => toast.classList.add('show'), 100);
         
-        // Remove after 3 seconds
+        
         setTimeout(() => {
             toast.classList.remove('show');
             setTimeout(() => toast.remove(), 300);

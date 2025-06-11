@@ -129,44 +129,8 @@
     </div>
     @endif
 </div>
-
-<style>
-.loading-indicator {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 2rem;
-    font-size: 1rem;
-    color: #6b7280;
-}
-
-.spinner {
-    width: 20px;
-    height: 20px;
-    border: 2px solid #e5e7eb;
-    border-top: 2px solid #3b82f6;
-    border-radius: 50%;
-    animation: spin 1s linear infinite;
-    margin-right: 0.5rem;
-}
-
-@keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-}
-
-.filter-group {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-}
-</style>
-
-<!-- Configure JavaScript variables -->
 <script>
-    // Make Laravel routes available to JavaScript
     window.taskFilterRoute = '{{ route("tasks.filter") }}';
-    // Make CSRF token available globally for axios
     window.csrfToken = '{{ csrf_token() }}';
 </script>
 @endsection

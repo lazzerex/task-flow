@@ -4,8 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TaskFlow - Manage Your Tasks Efficiently</title>
-    <!-- Custom Styles -->
-    
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body>
@@ -116,7 +114,7 @@
         </footer>
     </div>
 
-    <!-- Dark Mode Toggle -->
+    <!-- dark theme here -->
     <button id="darkModeToggle" class="dark-mode-toggle light-theme">
         <svg xmlns="http://www.w3.org/2000/svg" class="moon-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
@@ -132,7 +130,6 @@
     <!-- Application Scripts -->
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // User dropdown toggle
             const userMenuButton = document.getElementById('user-menu-button');
             const userDropdown = document.getElementById('user-dropdown');
             
@@ -141,7 +138,6 @@
                     userDropdown.classList.toggle('hidden');
                 });
                 
-                // Close dropdown when clicking outside
                 window.addEventListener('click', function(e) {
                     if (!userDropdown.contains(e.target) && !userMenuButton.contains(e.target)) {
                         userDropdown.classList.add('hidden');
@@ -149,7 +145,6 @@
                 });
             }
 
-            // Confetti animation for task completion
             const successMessage = document.querySelector('.message-content.success span');
             if (successMessage && successMessage.textContent.includes('completed')) {
                 confetti({
@@ -159,7 +154,6 @@
                 });
             }
 
-            // Status change animation
             const statusDropdowns = document.querySelectorAll('select[name="status"]');
             statusDropdowns.forEach(dropdown => {
                 dropdown.addEventListener('change', function() {
@@ -172,7 +166,6 @@
                 });
             });
 
-            // Search functionality with debounce
             const searchInput = document.querySelector('input[type="search"]');
             const searchForm = document.querySelector('.search-form');
             
@@ -189,7 +182,6 @@
             }
         });
 
-        // Dark mode functionality
         document.getElementById('darkModeToggle').addEventListener('click', function() {
             document.documentElement.classList.toggle('dark');
             
@@ -211,7 +203,6 @@
             }
         });
         
-        // Initialize dark mode on page load
         if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
             document.documentElement.classList.add('dark');
             document.querySelector('.moon-icon').classList.add('hidden');

@@ -16,38 +16,35 @@ export class TaskFiltering {
 
     init() {
         if (!this.statusFilter || !this.searchInput) {
-            return; // Not on tasks index page
+            return; 
         }
 
         this.bindEvents();
     }
 
     bindEvents() {
-        // Status filter change handler
         this.statusFilter.addEventListener('change', () => {
-            this.performFilter(1); // Reset to page 1 when filtering
+            this.performFilter(1); 
         });
-
-        // Search input handler with debouncing
+ 
         this.searchInput.addEventListener('input', () => {
             clearTimeout(this.searchTimeout);
             this.searchTimeout = setTimeout(() => {
-                this.performFilter(1); // Reset to page 1 when searching
+                this.performFilter(1); 
             }, 300);
         });
 
-        // Handle pagination clicks using event delegation
         document.addEventListener('click', (e) => {
             if (e.target.classList.contains('pagination-link')) {
                 e.preventDefault();
                 
-                // Extract page number from URL
+                
                 const url = new URL(e.target.href);
                 const page = url.searchParams.get('page') || 1;
                 
                 this.performFilter(page);
                 
-                // Scroll to top of task content
+                
                 this.taskContent.scrollIntoView({ behavior: 'smooth' });
             }
         });
@@ -107,7 +104,7 @@ export class TaskFiltering {
             this.paginationContent.innerHTML = data.pagination;
         }
         
-        // Smooth content transition
+        // content transition
         if (this.taskContent) {
             this.taskContent.style.opacity = '0';
             setTimeout(() => {
@@ -118,17 +115,10 @@ export class TaskFiltering {
     }
 
     showError(message) {
-        // You can implement a toast notification here
-        // For now, just use console.error
         console.error(message);
-        
-        // Optional: Show a user-friendly error message
-        if (window.TaskManager && window.TaskManager.showToast) {
-            window.TaskManager.showToast(message, 'error');
-        }
     }
 
-    // Public method to trigger filtering programmatically
+    
     filter(options = {}) {
         if (options.status !== undefined) {
             this.statusFilter.value = options.status;
@@ -139,7 +129,7 @@ export class TaskFiltering {
         this.performFilter(options.page || 1);
     }
 
-    // Public method to reset filters
+  
     resetFilters() {
         this.statusFilter.value = '';
         this.searchInput.value = '';

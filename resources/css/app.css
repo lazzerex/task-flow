@@ -3,7 +3,7 @@
 
 /*----------------pure css styles instead of tailwinds---------------------------*/
 
-/*@import '/home.css';*/
+@import 'resources/css/filter-spinner.css';
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 
 * {
