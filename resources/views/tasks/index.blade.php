@@ -35,13 +35,13 @@
     </div>
 </div>
 
-<!-- Loading indicator -->
+<!-- loading thing -->
 <div id="loadingIndicator" class="loading-indicator" style="display: none;">
     <div class="spinner"></div>
     <span>Loading tasks...</span>
 </div>
 
-<!-- Task content container -->
+<!-- task content container -->
 <div id="taskContent">
     @if($tasks->isEmpty())
     <div class="empty-state">
@@ -99,7 +99,7 @@
     @endif
 </div>
 
-<!-- Pagination container -->
+<!-- pagination container -->
 <div id="paginationContent">
     @if(!$tasks->isEmpty())
     <div class="pagination">
