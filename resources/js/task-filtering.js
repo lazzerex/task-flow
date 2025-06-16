@@ -34,7 +34,9 @@ export class TaskFiltering {
             }, 300);
         });
 
-        document.addEventListener('click', (e) => {
+        document.addEventListener('click', async (e) => {
+            // e.target.closest('.task-card')?.classList.remove('animate-pulse-slow');
+            // if (e.target.classList.contains('status-change')) {
             if (e.target.classList.contains('pagination-link')) {
                 e.preventDefault();
                 
@@ -42,7 +44,7 @@ export class TaskFiltering {
                 const url = new URL(e.target.href);
                 const page = url.searchParams.get('page') || 1;
                 
-                this.performFilter(page);
+                await this.performFilter(page);
                 
                 
                 this.taskContent.scrollIntoView({ behavior: 'smooth' });
@@ -78,11 +80,7 @@ export class TaskFiltering {
                 page: page
             };
 
-            const response = await window.axios.post(window.taskFilterRoute, data, {
-                headers: {
-                    'X-Requested-With': 'XMLHttpRequest'
-                }
-            });
+            const response = await axios.post(window.taskFilterRoute, data);
 
             if (response.data.success) {
                 this.updateContent(response.data);

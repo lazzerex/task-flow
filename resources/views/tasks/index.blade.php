@@ -43,92 +43,14 @@
 
 <!-- task content container -->
 <div id="taskContent">
-    @if($tasks->isEmpty())
-    <div class="empty-state">
-        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path>
-        </svg>
-        <h3>No tasks yet</h3>
-        <p>Get started by creating your first task</p>
-        <a href="{{ route('tasks.create') }}" class="btn-new-task">
-            Create Task
-        </a>
-    </div>
-    @else
-    <div class="task-grid">
-        @foreach($tasks as $task)
-        <div class="task-card" data-status="{{ $task->status }}">
-            <div class="task-card-header">
-                <div class="task-card-title-row">
-                    <h3 class="task-title">{{ $task->title }}</h3>
-                    <span class="status-badge {{ $task->status == 'pending' ? 'status-pending' : ($task->status == 'in_progress' ? 'status-in-progress' : 'status-completed') }}">
-                        {{ ucfirst(str_replace('_', ' ', $task->status)) }}
-                    </span>
-                </div>
-
-                @if($task->description)
-                <p class="task-description">{{ $task->description }}</p>
-                @endif
-
-                <div class="task-meta">
-                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
-                    </svg>
-                    <span>{{ $task->due_date ? $task->due_date->format('M d, Y') : 'No due date' }}</span>
-                </div>
-            </div>
-
-            <div class="task-card-footer">
-                <div class="task-footer-content">
-                    <div class="task-created-time">
-                        Created {{ $task->created_at->diffForHumans() }}
-                    </div>
-                    <div class="task-actions">
-                        <a href="{{ route('tasks.show', $task) }}" class="btn-action">
-                            View
-                        </a>
-                        <a href="{{ route('tasks.edit', $task) }}" class="btn-action">
-                            Edit
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>
-        @endforeach
-    </div>
-    @endif
+    @include('tasks.partials.task-grid', ['tasks' => $tasks])
 </div>
 
 <!-- pagination container -->
 <div id="paginationContent">
-    @if(!$tasks->isEmpty())
-    <div class="pagination">
-        @if ($tasks->previousPageUrl())
-            <a href="{{ $tasks->appends(request()->except('page'))->previousPageUrl() }}" class="pagination-btn pagination-link">
-                « Previous
-            </a>
-        @else
-            <span class="pagination-btn disabled">
-                « Previous
-            </span>
-        @endif
-
-        <span class="pagination-info">
-            Page {{ $tasks->currentPage() }} of {{ $tasks->lastPage() }}
-        </span>
-
-        @if ($tasks->nextPageUrl())
-            <a href="{{ $tasks->appends(request()->except('page'))->nextPageUrl() }}" class="pagination-btn pagination-link">
-                Next »
-            </a>
-        @else
-            <span class="pagination-btn disabled">
-                Next »
-            </span>
-        @endif
-    </div>
-    @endif
+    @include('tasks.partials.pagination', ['tasks' => $tasks])
 </div>
+
 <script>
     window.taskFilterRoute = '{{ route("tasks.filter") }}';
     window.csrfToken = '{{ csrf_token() }}';
